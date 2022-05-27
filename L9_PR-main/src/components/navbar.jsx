@@ -13,6 +13,11 @@ const Navbar = () => {
                     <Link to="/posts" className="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
                           aria-controls="pills-home" aria-selected="true">Posts</Link>
                 </li>
+                <li className="nav-item" role="presentation">
+                    <Link to="/login" className="nav-link" id="pills-home-tab" data-toggle="pill" role="tab"
+                          aria-controls="pills-home" aria-selected="true">Login</Link>
+                </li>
+
             </ul>
         </div>
     );
