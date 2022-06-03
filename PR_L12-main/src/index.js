@@ -16,7 +16,7 @@ import Home from "./components/home";
 import LoginForm from "./components/loginForm";
 import SignUpForm from "./components/signUp";
 import { isExpired } from "react-jwt";
-import Navbar from "./components/common/navbar";
+import {Navigate} from "react-router-dom"
 
 ReactDOM.render(
     <React.StrictMode>
@@ -25,7 +25,7 @@ ReactDOM.render(
                 <Route path="/" element={<App/>}>
                     <Route path="home" element={<Home/>}/>
                     <Route path="posts" element={isExpired(localStorage.getItem('token')) ?
-                        <Navbar replace to="/home"/> : <Posts/>}/>
+                        <Navigate replace to="/home"/> : <Posts/>}/>
                     <Route path="login" element={<LoginForm/>}/>
                     <Route path="signUp" element={<SignUpForm/>}/>
                     <Route        path="*"
