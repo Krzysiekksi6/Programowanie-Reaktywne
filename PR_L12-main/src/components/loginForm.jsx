@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { createBrowserHistory } from "history";
 const axios = require('axios');
 
-class SignUpForm extends Component {
+class LoginForm extends Component {
 
     constructor(props) {
         super(props);
@@ -10,19 +10,12 @@ class SignUpForm extends Component {
         this.history = createBrowserHistory();
     }
 
-
     state = {
         account: {
             username: "",
-            email: "",
             password: ""
         },
         errors: {}
-    };
-
-    handleChangeRoute = () => {
-        this.props.history.push('/');
-        window.location.reload();
     };
 
     validate = () => {
@@ -32,15 +25,18 @@ class SignUpForm extends Component {
         if (account.username.trim() === '') {
             errors.username = 'Username is required!';
         }
-        if (account.email.trim() === '') {
-            errors.password = 'Email is required!';
-        }
         if (account.password.trim() === '') {
             errors.password = 'Password is required!';
         }
 
         return Object.keys(errors).length === 0 ? null : errors;
     };
+
+    handleChangeRoute = () => {
+        this.props.history.push('/');
+        window.location.reload();
+    };
+
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -49,17 +45,15 @@ class SignUpForm extends Component {
         this.setState({errors: errors || {}});
         if (errors) return;
 
-        console.log(this.state)
-
         axios({
             method: 'post',
-            url: 'http://localhost:3001/api/user/create',
+            url: 'http://localhost:3001/api/user/auth',
             data: {
-                name: this.state.account.username,
-                email: this.state.account.email,
+                login: this.state.account.username,
                 password: this.state.account.password
             }
         }).then((response) => {
+            localStorage.setItem('token', response.data.token);
             this.handleChangeRoute();
         }).catch((error) => {
             const errors = {};
@@ -78,10 +72,10 @@ class SignUpForm extends Component {
     render() {
         return (
             <div>
-                <h1>Sign Up</h1>
+                <h1>Login</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="username">Name</label>
+                        <label htmlFor="username">Email address</label>
                         <input value={this.state.account.username}
                                name="username"
                                onChange={this.handleChange}
@@ -91,20 +85,7 @@ class SignUpForm extends Component {
                                aria-describedby="emailHelp"
                                placeholder="Username"/>
                         {this.state.errors.username &&
-                            <div className="alert alert-danger">{this.state.errors.username}</div>}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="email">Email address</label>
-                        <input value={this.state.account.email}
-                               name="email"
-                               onChange={this.handleChange}
-                               type="email"
-                               className="form-control"
-                               id="email"
-                               aria-describedby="emailHelp"
-                               placeholder="Email"/>
-                        {this.state.errors.email &&
-                            <div className="alert alert-danger">{this.state.errors.email}</div>}
+                        <div className="alert alert-danger">{this.state.errors.username}</div>}
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
@@ -116,9 +97,9 @@ class SignUpForm extends Component {
                                id="password"
                                placeholder="Password"/>
                         {this.state.errors.password &&
-                            <div className="alert alert-danger">{this.state.errors.password}</div>}
+                        <div className="alert alert-danger">{this.state.errors.password}</div>}
                     </div>
-                    <button type="submit" className="btn btn-primary">SignUp</button>
+                    <button type="submit" className="btn btn-primary">Login</button>
                 </form>
 
             </div>
@@ -126,4 +107,4 @@ class SignUpForm extends Component {
     }
 }
 
-export default SignUpForm;
+export default LoginForm;
